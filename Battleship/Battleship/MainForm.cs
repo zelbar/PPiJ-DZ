@@ -126,6 +126,12 @@ namespace Battleship
             InitializeComponent();
             GenerateBoard();
             GenerateShips();
+
+            // Randomize first player
+            if (rnd.Next(0, 2) == 1)
+            {
+                computer_Play();
+            }
         }
 
         private void button_Click(object sender, EventArgs e)
@@ -153,7 +159,7 @@ namespace Battleship
         {
             if (PlayerButton.PlayerFields == 0)
             {
-                MessageBox.Show("You, sir, are a loser!");
+                MessageBox.Show(String.Format("You, sir, are a loser! The computer defeated you in only {0:d} moves and you made {1:d} moves. You missed {2:d} ship(s).", PlayerButton.Moves, ComputerButton.Moves, ComputerButton.ComputerFields));
                 if (MessageBox.Show(null, "Do you want to lose again?", "Play again?", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
                     Application.Restart();
@@ -162,7 +168,7 @@ namespace Battleship
             }
             if (ComputerButton.ComputerFields == 0)
             {
-                MessageBox.Show("The computer lost, is sad, and doesn\'t want to play with you anymore.");
+                MessageBox.Show(String.Format("The computer was defeated in {0:d} moves, is sad, and doesn\'t want to play with you anymore.", ComputerButton.Moves));
                 Application.Exit();
             }
         }

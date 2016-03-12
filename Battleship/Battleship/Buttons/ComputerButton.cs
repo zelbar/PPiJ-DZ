@@ -9,6 +9,7 @@ namespace Battleship
     class ComputerButton : FieldButton
     {
         public static int ComputerFields { get; set; }
+        public static int Moves { get; set; }
         public bool Clicked
         {
             get
@@ -18,6 +19,7 @@ namespace Battleship
             set
             {
                 _clicked = value;
+                ++Moves;
                 this.Enabled = false;
                 //System.Threading.Thread.Sleep(250);
                 this.BackColor = System.Drawing.Color.Blue;

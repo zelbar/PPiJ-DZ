@@ -9,6 +9,7 @@ namespace Battleship
     class PlayerButton : FieldButton
     {
         public static int PlayerFields { get; set; }
+        public static int Moves { get; set; }
         public bool Clicked
         {
             get
@@ -18,6 +19,7 @@ namespace Battleship
             set
             {
                 _clicked = value;
+                ++Moves;
                 this.Text = "X";
                 this.BackColor = System.Drawing.Color.Blue;
                 if (this._hasShip == true)
