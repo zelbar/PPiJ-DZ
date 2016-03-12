@@ -17,6 +17,7 @@ namespace Battleship
             set
             {
                 _clicked = value;
+                this.Enabled = false;
                 this.Text = "X";
                 if (this._hasShip == true)
                 {

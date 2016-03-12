@@ -14,14 +14,20 @@ namespace Battleship.Ships
         /// </summary>
         public bool[,] PositionMatrix { get; set; }
         protected int Size { get; set; }
-        protected System.Random Random { get; set; }
+        protected System.Random rnd { get; set; }
 
         /// <summary>
         /// Places the ship with with random position in the given array.
         /// </summary>
         /// <param name="array">FiledButton array to place the ship in.</param>
-        public Ship(FieldButton[,] array)
+        public Ship(FieldButton[,] array, int size)
         {
+            if (rnd == null)
+            {
+                rnd = new System.Random();
+            }
+            Size = size;
+
             var position = new StartEnd()
             {
                 A = new Point() { X = 0, Y = 0 },
@@ -35,24 +41,28 @@ namespace Battleship.Ships
             {
                 // Random generate orientation and starting position
                 // within the field
-                if (Random.Next(0, 2) == 1)
+                if (rnd.Next(0, 2) == 1)
                 {
                     // Horizontal
-                    position.A.X = Random.Next(0, 11 - this.Size);
-                    position.A.Y = Random.Next(0, 11);
+                    position.A.X = rnd.Next(0, 10 - this.Size + 1);
+                    position.B.X = position.A.X + this.Size - 1;
+
+                    position.A.Y = position.B.Y = rnd.Next(0, 10);
                 }
                 else
                 {
                     // Vertical
-                    position.A.X = Random.Next(0, 11);
-                    position.A.Y = Random.Next(0, 11 - this.Size);
+                    position.A.Y = rnd.Next(0, 10 - this.Size + 1);
+                    position.B.Y = position.A.Y + this.Size - 1;
+
+                    position.A.X = position.B.X = rnd.Next(0, 10);
                 }
 
-                // Check if there is overlapping
+                // Check direction and if there is overlapping
                 overlap = false;
-                for (i = position.A.X; (overlap == false) && (i < position.B.X); ++i)
+                for (i = position.A.X; (overlap == false) && (i <= position.B.X); ++i)
                 {
-                    for (j = position.A.Y; j < position.B.Y; ++j)
+                    for (j = position.A.Y; j <= position.B.Y; ++j)
                     {
                         if (array[i, j].HasShip == true)
                         {
@@ -63,14 +73,13 @@ namespace Battleship.Ships
                 }
             } while (overlap == true);
 
-            // Mark the chosen position in the position matrix
+            // Mark the chosen position in the position matrix and field array
             PositionMatrix = new bool[10, 10];
-            for (i = position.A.X; i < position.B.X; ++i)
+            for (i = position.A.X; i <= position.B.X; ++i)
             {
-                for (j = position.B.X; j < position.B.Y; ++j)
+                for (j = position.B.Y; j <= position.B.Y; ++j)
                 {
-                    PositionMatrix[i, j] = true;
-                    array[i, j].HasShip = true;
+                    array[i, j].HasShip = PositionMatrix[i, j] = true;
                 }
             }
         }

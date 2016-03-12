@@ -12,8 +12,10 @@ namespace Battleship
 {
     public partial class MainForm : Form
     {
-        private System.Windows.Forms.Button[,] computerButtons = new FieldButton[10, 10];
-        private System.Windows.Forms.Button[,] playerButtons = new FieldButton[10, 10];
+        private ComputerButton[,] computerButtons = new ComputerButton[10, 10];
+        private PlayerButton[,] playerButtons = new PlayerButton[10, 10];
+        private List<Ships.Ship> PlayerShips { get; set; }
+        private List<Ships.Ship> ComputerShips { get; set; }
         System.Random rnd = new System.Random();
 
         /// <summary>
@@ -21,8 +23,8 @@ namespace Battleship
         /// </summary>
         private void GenerateBoard()
         {
-            GenerateButtons(ref playerButtons, player: true);
-            GenerateButtons(ref computerButtons, player: false);
+            GenerateButtons(playerButtons, player: true);
+            GenerateButtons(computerButtons, player: false);
         }
 
         /// <summary>
@@ -30,7 +32,7 @@ namespace Battleship
         /// </summary>
         /// <param name="buttonArray">FieldButton 10x10 array.</param>
         /// <param name="player">Determines whether to generates the computer or player button field</param>
-        private void GenerateButtons(ref System.Windows.Forms.Button[,] buttonArray, bool player)
+        private void GenerateButtons(FieldButton[,] buttonArray, bool player)
         {
             for (int i = 0; i < 10; ++i)
             {
@@ -40,12 +42,10 @@ namespace Battleship
                     if (player)
                     {
                         btn = new PlayerButton(button_Click);
-                        (btn as PlayerButton).HasShip = (rnd.Next(0, 5) == 1) ? true : false;
                     }
                     else
                     {
                         btn = new ComputerButton(button_Click);
-                        (btn as ComputerButton).HasShip = (rnd.Next(0, 5) == 1) ? true : false;
                     }
 
                     btn.Location = new System.Drawing.Point(25 * j, 25 * i);
@@ -64,10 +64,72 @@ namespace Battleship
             }
         }
 
+        /// <summary>
+        /// Generates ships on both computer and player fields.
+        /// </summary>
+        void GenerateShips()
+        {
+            PlaceShips(false, computerButtons);
+            PlaceShips(true, playerButtons);
+        }
+
+        /// <summary>
+        /// Places the ships within the given array.
+        /// </summary>
+        /// <param name="buttonsArray">Computer or player FieldButton array.</param>
+        void PlaceShips(bool player, FieldButton[,] buttonsArray)
+        {
+            var list = new List<Ships.Ship>();
+
+            for (int i = 0; i < 3; ++i)
+            {
+                list.Add(new Ships.Ship(buttonsArray, 10));
+            }
+
+            /*
+            list.Add(new Ships.Ship(buttonsArray, 4));
+
+            for (int i = 0; i < 2; ++i)
+            {
+                list.Add(new Ships.Ship(buttonsArray, 3));
+            }
+
+            for (int i = 0; i < 3; ++i)
+            {
+                list.Add(new Ships.Ship(buttonsArray, 2));
+            }
+
+            for (int i = 0; i < 4; ++i)
+            {
+                list.Add(new Ships.Ship(buttonsArray, 1));
+            }
+            */
+
+            foreach (Ships.Ship ship in list)
+            {
+                for (int i = 0; i < 10; ++i)
+                {
+                    for (int j = 0; j < 10; ++j)
+                    {
+                        if (player == true)
+                        {
+                            playerButtons[i, j].HasShip ^= ship.PositionMatrix[i, j];
+                        }
+                        else if (player == false)
+                        {
+                            computerButtons[i, j].HasShip ^= ship.PositionMatrix[i, j];
+                        }
+                    }
+                }
+            }
+
+        }
+
         public MainForm()
         {
             InitializeComponent();
             GenerateBoard();
+            GenerateShips();
         }
 
         private void button_Click(object sender, EventArgs e)
