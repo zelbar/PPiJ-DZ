@@ -80,13 +80,7 @@ namespace Battleship
         void PlaceShips(bool player, FieldButton[,] buttonsArray)
         {
             var list = new List<Ships.Ship>();
-
-            for (int i = 0; i < 3; ++i)
-            {
-                list.Add(new Ships.Ship(buttonsArray, 10));
-            }
-
-            /*
+            
             list.Add(new Ships.Ship(buttonsArray, 4));
 
             for (int i = 0; i < 2; ++i)
@@ -103,7 +97,6 @@ namespace Battleship
             {
                 list.Add(new Ships.Ship(buttonsArray, 1));
             }
-            */
 
             foreach (Ships.Ship ship in list)
             {
@@ -111,13 +104,16 @@ namespace Battleship
                 {
                     for (int j = 0; j < 10; ++j)
                     {
-                        if (player == true)
+                        if (ship.PositionMatrix[i, j] == true)
                         {
-                            playerButtons[i, j].HasShip ^= ship.PositionMatrix[i, j];
-                        }
-                        else if (player == false)
-                        {
-                            computerButtons[i, j].HasShip ^= ship.PositionMatrix[i, j];
+                            if (player == true)
+                            {
+                                playerButtons[i, j].HasShip = true;
+                            }
+                            else if (player == false)
+                            {
+                                computerButtons[i, j].HasShip = true;
+                            }
                         }
                     }
                 }
@@ -149,6 +145,26 @@ namespace Battleship
                 btn = (PlayerButton)playerButtons[rnd.Next(0, 10), rnd.Next(0, 10)];
             } while (btn.Clicked == true);
             (btn as PlayerButton).Clicked = true;
+
+            check_Loser();
+        }
+
+        private void check_Loser()
+        {
+            if (PlayerButton.PlayerFields == 0)
+            {
+                MessageBox.Show("You, sir, are a loser!");
+                if (MessageBox.Show(null, "Do you want to lose again?", "Play again?", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    Application.Restart();
+                }
+                Application.Exit();
+            }
+            if (ComputerButton.ComputerFields == 0)
+            {
+                MessageBox.Show("The computer lost, is sad, and doesn\'t want to play with you anymore.");
+                Application.Exit();
+            }
         }
     }
 }

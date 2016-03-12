@@ -41,24 +41,22 @@ namespace Battleship.Ships
             {
                 // Random generate orientation and starting position
                 // within the field
-                if (rnd.Next(0, 2) == 1)
+                if (rnd.Next(0, 2) == 0)
                 {
                     // Horizontal
-                    position.A.X = rnd.Next(0, 10 - this.Size + 1);
-                    position.B.X = position.A.X + this.Size - 1;
-
-                    position.A.Y = position.B.Y = rnd.Next(0, 10);
+                    position.A.Y = rnd.Next(0, 10 - this.Size + 1);
+                    position.B.Y = position.A.Y + this.Size - 1;
+                    position.A.X = position.B.X = rnd.Next(0, 10);
                 }
                 else
                 {
                     // Vertical
-                    position.A.Y = rnd.Next(0, 10 - this.Size + 1);
-                    position.B.Y = position.A.Y + this.Size - 1;
-
-                    position.A.X = position.B.X = rnd.Next(0, 10);
+                    position.A.X = rnd.Next(0, 10 - this.Size + 1);
+                    position.B.X = position.A.X + this.Size - 1;
+                    position.A.Y = position.B.Y = rnd.Next(0, 10);
                 }
 
-                // Check direction and if there is overlapping
+                // Check overlapping
                 overlap = false;
                 for (i = position.A.X; (overlap == false) && (i <= position.B.X); ++i)
                 {
@@ -77,7 +75,7 @@ namespace Battleship.Ships
             PositionMatrix = new bool[10, 10];
             for (i = position.A.X; i <= position.B.X; ++i)
             {
-                for (j = position.B.Y; j <= position.B.Y; ++j)
+                for (j = position.A.Y; j <= position.B.Y; ++j)
                 {
                     array[i, j].HasShip = PositionMatrix[i, j] = true;
                 }

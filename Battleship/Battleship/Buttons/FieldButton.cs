@@ -8,8 +8,9 @@ namespace Battleship
 {
     class FieldButton : System.Windows.Forms.Button
     {
-        protected bool _hasShip;
+        protected bool _hasShip = false;
         protected bool _clicked;
+        
         public bool HasShip
         {
             get

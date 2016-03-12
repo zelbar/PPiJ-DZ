@@ -8,6 +8,7 @@ namespace Battleship
 {
     class PlayerButton : FieldButton
     {
+        public static int PlayerFields { get; set; }
         public bool Clicked
         {
             get
@@ -21,6 +22,7 @@ namespace Battleship
                 this.BackColor = System.Drawing.Color.Blue;
                 if (this._hasShip == true)
                 {
+                    --PlayerFields;
                     System.Threading.Thread.Sleep(250);
                     this.BackColor = System.Drawing.Color.Red;
                 }
@@ -39,6 +41,7 @@ namespace Battleship
             }
             set
             {
+                ++PlayerFields;
                 this._hasShip = value;
                 if (value == true)
                 {
