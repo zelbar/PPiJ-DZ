@@ -134,6 +134,11 @@ namespace Battleship
             }
         }
 
+        /// <summary>
+        /// Handles player move.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button_Click(object sender, EventArgs e)
         {
             var s = (sender as ComputerButton);
@@ -142,6 +147,9 @@ namespace Battleship
             computer_Play();
         }
 
+        /// <summary>
+        /// Simulates computer move.
+        /// </summary>
         private void computer_Play()
         {
             // Choose a non-clicked player field button randomly
@@ -155,6 +163,9 @@ namespace Battleship
             check_Loser();
         }
 
+        /// <summary>
+        /// Checks whether the game has finished.
+        /// </summary>
         private void check_Loser()
         {
             if (PlayerButton.PlayerFields == 0)

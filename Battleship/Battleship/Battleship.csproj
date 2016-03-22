@@ -76,7 +76,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AI.cs" />
     <Compile Include="Buttons\ComputerButton.cs">
       <SubType>Component</SubType>
     </Compile>
